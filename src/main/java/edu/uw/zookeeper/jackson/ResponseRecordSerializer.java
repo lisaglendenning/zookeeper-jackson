@@ -24,7 +24,7 @@ public class ResponseRecordSerializer extends StdSerializer<Records.Response> {
             SerializerProvider provider) throws JsonGenerationException,
             IOException {
         jgen.writeStartArray();
-        jgen.writeNumber(value.opcode().ordinal());
+        jgen.writeNumber(value.opcode().intValue());
         Records.Responses.serialize(value, new JacksonOutputArchive(jgen));
         jgen.writeEndArray();
     }

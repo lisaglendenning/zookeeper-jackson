@@ -22,7 +22,7 @@ public class RequestRecordSerializer extends StdSerializer<Records.Request> {
     @Override
     public void serialize(Records.Request value, JsonGenerator jgen, SerializerProvider provider) throws JsonGenerationException, IOException {
         jgen.writeStartArray();
-        jgen.writeNumber(value.opcode().ordinal());
+        jgen.writeNumber(value.opcode().intValue());
         Records.Requests.serialize(value, new JacksonOutputArchive(jgen));
         jgen.writeEndArray();
     }

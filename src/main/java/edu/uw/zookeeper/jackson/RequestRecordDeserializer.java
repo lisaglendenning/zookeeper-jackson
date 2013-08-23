@@ -8,6 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+
+import edu.uw.zookeeper.protocol.ConnectMessage;
 import edu.uw.zookeeper.protocol.proto.OpCode;
 import edu.uw.zookeeper.protocol.proto.Records;
 
@@ -32,7 +34,16 @@ public class RequestRecordDeserializer extends StdDeserializer<Records.Request> 
         json.nextToken();
         OpCode opcode = OpCode.of(json.getIntValue());
         json.nextToken();
-        Records.Request value = Records.Requests.deserialize(opcode, new JacksonInputArchive(json));
+        JacksonInputArchive archive = new JacksonInputArchive(json);
+        Records.Request value;
+        switch (opcode) {
+        case CREATE_SESSION:
+            value = ConnectMessage.Request.deserialize(archive);
+            break;
+        default:
+            value = Records.Requests.deserialize(opcode, archive);
+            break;
+        }
         if (json.getCurrentToken() != JsonToken.END_ARRAY) {
             throw new JsonParseException(String.valueOf(json.getCurrentToken()), json.getCurrentLocation());
         }

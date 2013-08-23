@@ -70,8 +70,11 @@ public class JacksonOutputArchive implements OutputArchive {
 
     @Override
     public void writeRecord(Record r, String tag) throws IOException {
-        checkNotNull(r);
-        r.serialize(this, tag);
+        if (r == null) {
+            json.writeNull();
+        } else {
+            r.serialize(this, tag);
+        }
     }
 
     @Override

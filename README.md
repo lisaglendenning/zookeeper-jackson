@@ -1,1 +1,1 @@
-Serialization library that uses Jackson for zookeeper-lite.
+Serialization library for zookeeper-lite that uses Jackson.

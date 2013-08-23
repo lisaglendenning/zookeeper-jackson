@@ -63,28 +63,41 @@ public class JacksonInputArchive implements InputArchive {
 
     @Override
     public String readString(String tag) throws IOException {
+        String value;
         if (json.getCurrentToken() == JsonToken.VALUE_NULL) {
-            return null;
+            value = null;
+        } else {
+            value = json.getValueAsString();
         }
-        String value = json.getValueAsString();
         json.nextToken();
         return value;
     }
 
     @Override
     public byte[] readBuffer(String tag) throws IOException {
+        byte[] value;
         if (json.getCurrentToken() == JsonToken.VALUE_NULL) {
-            return null;
+            value = null;
+        } else {
+            value = json.getBinaryValue();
         }
-        byte[] value = json.getBinaryValue();
         json.nextToken();
         return value;
     }
 
     @Override
     public void readRecord(Record r, String tag) throws IOException {
-        checkNotNull(r);
-        r.deserialize(this, tag);
+        if (r == null) {
+            if (! json.hasCurrentToken()) {
+                json.nextToken();
+            }
+            if (json.getCurrentToken() != JsonToken.VALUE_NULL) {
+                throw new IllegalArgumentException(String.valueOf(r));
+            }
+            json.nextToken();
+        } else {
+            r.deserialize(this, tag);
+        }
     }
 
     @Override
@@ -108,14 +121,17 @@ public class JacksonInputArchive implements InputArchive {
 
     @Override
     public Index startVector(String tag) throws IOException {
+        Index value;
         if (json.getCurrentToken() == JsonToken.VALUE_NULL) {
-            return null;
-        }
-        if (! json.isExpectedStartArrayToken()) {
-            throw new JsonParseException(String.valueOf(json.getCurrentToken()), json.getCurrentLocation());
+            value = null;
+        } else {
+            if (! json.isExpectedStartArrayToken()) {
+                throw new JsonParseException(String.valueOf(json.getCurrentToken()), json.getCurrentLocation());
+            }
+            value = new ArrayIndex();
         }
         json.nextToken();
-        return new ArrayIndex();
+        return value;
     }
 
     @Override
@@ -127,14 +143,17 @@ public class JacksonInputArchive implements InputArchive {
 
     @Override
     public Index startMap(String tag) throws IOException {
+        Index value;
         if (json.getCurrentToken() == JsonToken.VALUE_NULL) {
-            return null;
-        }
-        if (! json.isExpectedStartArrayToken()) {
-            throw new JsonParseException(String.valueOf(json.getCurrentToken()), json.getCurrentLocation());
+            value = null;
+        } else {
+            if (! json.isExpectedStartArrayToken()) {
+                throw new JsonParseException(String.valueOf(json.getCurrentToken()), json.getCurrentLocation());
+            }
+            value = new ArrayIndex();
         }
         json.nextToken();
-        return new ArrayIndex();
+        return value;
     }
 
     @Override
@@ -155,7 +174,11 @@ public class JacksonInputArchive implements InputArchive {
         
         @Override
         public boolean done() {
-            return ((json.getParsingContext() != context) ||
+            JsonStreamContext c = json.getParsingContext();
+            while (!context.equals(c) && (c != null)) {
+                c = c.getParent();
+            }
+            return ((!context.equals(c)) ||
                     (json.getCurrentToken() == JsonToken.END_ARRAY));
         }
 
