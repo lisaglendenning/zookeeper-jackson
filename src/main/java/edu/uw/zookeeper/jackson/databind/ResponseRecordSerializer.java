@@ -1,4 +1,4 @@
-package edu.uw.zookeeper.jackson;
+package edu.uw.zookeeper.jackson.databind;
 
 import java.io.IOException;
 
@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
+import edu.uw.zookeeper.jackson.ResponseRecordCoreSerializer;
 import edu.uw.zookeeper.protocol.proto.Records;
 
 public class ResponseRecordSerializer extends StdSerializer<Records.Response> {
@@ -15,17 +16,21 @@ public class ResponseRecordSerializer extends StdSerializer<Records.Response> {
         return new ResponseRecordSerializer();
     }
     
+    protected final ResponseRecordCoreSerializer delegate;
+    
     public ResponseRecordSerializer() {
-        super(Records.Response.class);
+        this(ResponseRecordCoreSerializer.create());
     }
 
+    protected ResponseRecordSerializer(ResponseRecordCoreSerializer delegate) {
+        super(delegate.handledType());
+        this.delegate = delegate;
+    }
+    
     @Override
-    public void serialize(Records.Response value, JsonGenerator jgen,
+    public void serialize(Records.Response value, JsonGenerator json,
             SerializerProvider provider) throws JsonGenerationException,
             IOException {
-        jgen.writeStartArray();
-        jgen.writeNumber(value.opcode().intValue());
-        Records.Responses.serialize(value, new JacksonOutputArchive(jgen));
-        jgen.writeEndArray();
+        delegate.serialize(value, json);
     }
 }

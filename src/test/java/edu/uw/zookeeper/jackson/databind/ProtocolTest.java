@@ -1,4 +1,4 @@
-package edu.uw.zookeeper.jackson;
+package edu.uw.zookeeper.jackson.databind;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 
 import edu.uw.zookeeper.data.Operations;
+import edu.uw.zookeeper.jackson.databind.JacksonModule;
 import edu.uw.zookeeper.protocol.Operation;
 import edu.uw.zookeeper.protocol.ProtocolRequestMessage;
 import edu.uw.zookeeper.protocol.ProtocolResponseMessage;

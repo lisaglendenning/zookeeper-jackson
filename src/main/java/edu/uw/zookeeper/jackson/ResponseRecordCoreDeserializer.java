@@ -6,27 +6,29 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import edu.uw.zookeeper.protocol.ConnectMessage;
 import edu.uw.zookeeper.protocol.proto.OpCode;
 import edu.uw.zookeeper.protocol.proto.Records;
+import edu.uw.zookeeper.protocol.proto.Records.Response;
 
-public class ResponseRecordDeserializer extends StdDeserializer<Records.Response> {
+public class ResponseRecordCoreDeserializer implements JacksonCoreDeserializer<Records.Response> {
 
-    public static ResponseRecordDeserializer create() {
-        return new ResponseRecordDeserializer();
+    public static ResponseRecordCoreDeserializer create() {
+        return new ResponseRecordCoreDeserializer();
     }
 
-    private static final long serialVersionUID = -9158763633870689053L;
-
-    public ResponseRecordDeserializer() {
-        super(Records.Response.class);
+    public ResponseRecordCoreDeserializer() {
+        super();
     }
 
     @Override
-    public Records.Response deserialize(JsonParser json, DeserializationContext ctxt)
+    public Class<Response> handledType() {
+        return Records.Response.class;
+    }
+
+    @Override
+    public Records.Response deserialize(JsonParser json)
             throws IOException, JsonProcessingException {
         if (! json.isExpectedStartArrayToken()) {
             throw new JsonParseException(String.valueOf(json.getCurrentToken()), json.getCurrentLocation());

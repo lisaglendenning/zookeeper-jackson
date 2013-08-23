@@ -1,4 +1,4 @@
-package edu.uw.zookeeper.jackson;
+package edu.uw.zookeeper.jackson.databind;
 
 import java.io.IOException;
 
@@ -7,8 +7,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
+import edu.uw.zookeeper.jackson.ProtocolRequestCoreSerializer;
 import edu.uw.zookeeper.protocol.Operation;
-import edu.uw.zookeeper.protocol.ProtocolRequestMessage;
 
 public class ProtocolRequestSerializer extends StdSerializer<Operation.ProtocolRequest<?>> {
 
@@ -16,14 +16,19 @@ public class ProtocolRequestSerializer extends StdSerializer<Operation.ProtocolR
         return new ProtocolRequestSerializer();
     }
 
+    protected final ProtocolRequestCoreSerializer delegate;
+
     public ProtocolRequestSerializer() {
-        super(Operation.ProtocolRequest.class, true);
+        this(ProtocolRequestCoreSerializer.create());
+    }
+    
+    protected ProtocolRequestSerializer(ProtocolRequestCoreSerializer delegate) {
+        super(delegate.handledType(), true);
+        this.delegate = delegate;
     }
 
     @Override
     public void serialize(Operation.ProtocolRequest<?> value, JsonGenerator json, SerializerProvider provider) throws JsonGenerationException, IOException {
-        json.writeStartArray();
-        ProtocolRequestMessage.serialize(value, new JacksonOutputArchive(json));
-        json.writeEndArray();
+        delegate.serialize(value, json);
     }
 }

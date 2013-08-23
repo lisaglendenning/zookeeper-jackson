@@ -1,4 +1,4 @@
-package edu.uw.zookeeper.jackson;
+package edu.uw.zookeeper.jackson.databind;
 
 import java.util.List;
 import java.util.Map;

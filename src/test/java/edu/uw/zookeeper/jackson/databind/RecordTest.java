@@ -1,4 +1,4 @@
-package edu.uw.zookeeper.jackson;
+package edu.uw.zookeeper.jackson.databind;
 
 import static org.junit.Assert.*;
 
@@ -13,7 +13,11 @@ import org.junit.runners.JUnit4;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.uw.zookeeper.data.Operations;
-import edu.uw.zookeeper.protocol.ConnectMessage;
+import edu.uw.zookeeper.jackson.databind.JacksonModule;
+import edu.uw.zookeeper.jackson.databind.RequestRecordDeserializer;
+import edu.uw.zookeeper.jackson.databind.RequestRecordSerializer;
+import edu.uw.zookeeper.jackson.databind.ResponseRecordDeserializer;
+import edu.uw.zookeeper.jackson.databind.ResponseRecordSerializer;
 import edu.uw.zookeeper.protocol.proto.OpCode;
 import edu.uw.zookeeper.protocol.proto.Records;
 
@@ -29,11 +33,6 @@ public class RecordTest {
                 JacksonModule.create()
                     .addSerializer(RequestRecordSerializer.create())
                     .addDeserializer(Records.Request.class, RequestRecordDeserializer.create()));
-        Records.Request input = ConnectMessage.Request.NewRequest.newInstance();
-        String encoded = mapper.writeValueAsString(input);
-        logger.debug(encoded);
-        Records.Request output = mapper.readValue(encoded, Records.Request.class);
-        assertEquals(input, output);
         for (OpCode opcode: OpCode.values()) {
             Operations.Builder<? extends Records.Request> builder;
             try {
@@ -41,10 +40,10 @@ public class RecordTest {
             } catch (IllegalArgumentException e) {
                 continue;
             }
-            input = builder.build();
-            encoded = mapper.writeValueAsString(input);
+            Records.Request input = builder.build();
+            String encoded = mapper.writeValueAsString(input);
             logger.debug(encoded);
-            output = mapper.readValue(encoded, Records.Request.class);
+            Records.Request output = mapper.readValue(encoded, Records.Request.class);
             assertEquals(input, output);
         }
     }
@@ -56,11 +55,6 @@ public class RecordTest {
                 JacksonModule.create()
                     .addSerializer(ResponseRecordSerializer.create())
                     .addDeserializer(Records.Response.class, ResponseRecordDeserializer.create()));
-        Records.Response input = ConnectMessage.Response.Invalid.newInstance();
-        String encoded = mapper.writeValueAsString(input);
-        logger.debug(encoded);
-        Records.Response output = mapper.readValue(encoded, Records.Response.class);
-        assertEquals(input, output);
         for (OpCode opcode: OpCode.values()) {
             Operations.Builder<? extends Records.Response> builder;
             try {
@@ -68,10 +62,10 @@ public class RecordTest {
             } catch (IllegalArgumentException e) {
                 continue;
             }
-            input = builder.build();
-            encoded = mapper.writeValueAsString(input);
+            Records.Response input = builder.build();
+            String encoded = mapper.writeValueAsString(input);
             logger.debug(encoded);
-            output = mapper.readValue(encoded, Records.Response.class);
+            Records.Response output = mapper.readValue(encoded, Records.Response.class);
             assertEquals(input, output);
         }
     }

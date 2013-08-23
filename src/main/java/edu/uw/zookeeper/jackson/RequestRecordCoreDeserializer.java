@@ -6,27 +6,28 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import edu.uw.zookeeper.protocol.ConnectMessage;
 import edu.uw.zookeeper.protocol.proto.OpCode;
 import edu.uw.zookeeper.protocol.proto.Records;
 
-public class RequestRecordDeserializer extends StdDeserializer<Records.Request> {
+public class RequestRecordCoreDeserializer implements JacksonCoreDeserializer<Records.Request> {
 
-    public static RequestRecordDeserializer create() {
-        return new RequestRecordDeserializer();
+    public static RequestRecordCoreDeserializer create() {
+        return new RequestRecordCoreDeserializer();
     }
 
-    private static final long serialVersionUID = 191925488788083157L;
-
-    public RequestRecordDeserializer() {
-        super(Records.Request.class);
+    public RequestRecordCoreDeserializer() {
+        super();
     }
 
     @Override
-    public Records.Request deserialize(JsonParser json, DeserializationContext ctxt)
+    public Class<Records.Request> handledType() {
+        return Records.Request.class;
+    }
+
+    @Override
+    public Records.Request deserialize(JsonParser json)
             throws IOException, JsonProcessingException {
         if (! json.isExpectedStartArrayToken()) {
             throw new JsonParseException(String.valueOf(json.getCurrentToken()), json.getCurrentLocation());
