@@ -1,11 +1,7 @@
 package edu.uw.zookeeper.jackson.databind;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -22,9 +18,7 @@ import edu.uw.zookeeper.protocol.proto.OpCode;
 import edu.uw.zookeeper.protocol.proto.Records;
 
 @RunWith(JUnit4.class)
-public class RecordTest {
-    
-    protected final Logger logger = LogManager.getLogger(getClass());
+public class RecordTest extends SerializeTest {
     
     @Test
     public void testRequests() throws IOException {
@@ -40,11 +34,7 @@ public class RecordTest {
             } catch (IllegalArgumentException e) {
                 continue;
             }
-            Records.Request input = builder.build();
-            String encoded = mapper.writeValueAsString(input);
-            logger.debug(encoded);
-            Records.Request output = mapper.readValue(encoded, Records.Request.class);
-            assertEquals(input, output);
+            testStringSerialization(builder.build(), Records.Request.class, mapper);
         }
     }
     
@@ -62,11 +52,7 @@ public class RecordTest {
             } catch (IllegalArgumentException e) {
                 continue;
             }
-            Records.Response input = builder.build();
-            String encoded = mapper.writeValueAsString(input);
-            logger.debug(encoded);
-            Records.Response output = mapper.readValue(encoded, Records.Response.class);
-            assertEquals(input, output);
+            testStringSerialization(builder.build(), Records.Response.class, mapper);
         }
     }
 }

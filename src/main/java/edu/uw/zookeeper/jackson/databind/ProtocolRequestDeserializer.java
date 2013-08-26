@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import edu.uw.zookeeper.jackson.ProtocolRequestCoreDeserializer;
 import edu.uw.zookeeper.protocol.Operation;
+import edu.uw.zookeeper.protocol.ProtocolRequestMessage;
 
 public class ProtocolRequestDeserializer extends StdDeserializer<Operation.ProtocolRequest<?>> {
 
@@ -30,8 +31,13 @@ public class ProtocolRequestDeserializer extends StdDeserializer<Operation.Proto
     }
 
     @Override
-    public Operation.ProtocolRequest<?> deserialize(JsonParser json, DeserializationContext ctxt)
+    public ProtocolRequestMessage<?> deserialize(JsonParser json, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
         return delegate.deserialize(json);
+    }
+    
+    @Override
+    public boolean isCachable() { 
+        return true; 
     }
 }

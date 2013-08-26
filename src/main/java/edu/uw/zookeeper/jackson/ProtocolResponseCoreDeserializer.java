@@ -32,14 +32,14 @@ public class ProtocolResponseCoreDeserializer implements JacksonCoreDeserializer
     }
 
     @Override
-    public Operation.ProtocolResponse<?> deserialize(JsonParser json)
+    public ProtocolResponseMessage<?> deserialize(JsonParser json)
             throws IOException, JsonProcessingException {
         if (! json.isExpectedStartArrayToken()) {
             throw new JsonParseException(String.valueOf(json.getCurrentToken()), json.getCurrentLocation());
         }
         json.nextToken();
         JacksonInputArchive archive = new JacksonInputArchive(json);
-        Operation.ProtocolResponse<?> value = ProtocolResponseMessage.deserialize(xidToOpCode, archive);
+        ProtocolResponseMessage<?> value = ProtocolResponseMessage.deserialize(xidToOpCode, archive);
         if (json.getCurrentToken() != JsonToken.END_ARRAY) {
             throw new JsonParseException(String.valueOf(json.getCurrentToken()), json.getCurrentLocation());
         }

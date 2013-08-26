@@ -1,11 +1,8 @@
 package edu.uw.zookeeper.jackson.databind;
 
-import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -22,9 +19,7 @@ import edu.uw.zookeeper.protocol.proto.OpCode;
 import edu.uw.zookeeper.protocol.proto.Records;
 
 @RunWith(JUnit4.class)
-public class ProtocolTest {
-    
-    protected final Logger logger = LogManager.getLogger(getClass());
+public class ProtocolTest extends SerializeTest {
     
     @Test
     public void testRequests() throws IOException {
@@ -43,11 +38,9 @@ public class ProtocolTest {
             } catch (IllegalArgumentException e) {
                 continue;
             }
-            ProtocolRequestMessage<?> input = ProtocolRequestMessage.of(opcode.ordinal(), builder.build());
-            String encoded = mapper.writeValueAsString(input);
-            logger.debug(encoded);
-            Operation.ProtocolRequest<?> output = mapper.readValue(encoded, Operation.ProtocolRequest.class);
-            assertEquals(input, output);
+            testStringSerialization(
+                    ProtocolRequestMessage.of(opcode.ordinal(), builder.build()), 
+                    Operation.ProtocolRequest.class, mapper);
         }
     }
     
@@ -75,11 +68,10 @@ public class ProtocolTest {
             } catch (IllegalArgumentException e) {
                 continue;
             }
-            ProtocolResponseMessage<?> input = ProtocolResponseMessage.of(opcode.ordinal(), (long) opcode.ordinal(), builder.build());
-            String encoded = mapper.writeValueAsString(input);
-            logger.debug(encoded);
-            Operation.ProtocolResponse<?> output = mapper.readValue(encoded, Operation.ProtocolResponse.class);
-            assertEquals(input, output);
+            testStringSerialization(
+                    ProtocolResponseMessage.of(opcode.ordinal(), (long) opcode.ordinal(), builder.build()),
+                    Operation.ProtocolResponse.class,
+                    mapper);
         }
     }
 }

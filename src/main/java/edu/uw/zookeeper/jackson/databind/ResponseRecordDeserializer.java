@@ -35,4 +35,9 @@ public class ResponseRecordDeserializer extends StdDeserializer<Records.Response
             throws IOException, JsonProcessingException {
         return delegate.deserialize(json);
     }
+    
+    @Override
+    public boolean isCachable() { 
+        return true; 
+    }
 }
