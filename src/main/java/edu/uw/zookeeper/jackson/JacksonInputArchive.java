@@ -156,7 +156,7 @@ public class JacksonInputArchive implements InputArchive {
         } else if (token == JsonToken.VALUE_NULL) {
             json.clearCurrentToken();
         } else {
-           throw new JsonParseException(String.valueOf(token), json.getCurrentLocation());
+            // must be an EmptyRecord
         }
     }
 
