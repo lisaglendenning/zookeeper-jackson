@@ -16,6 +16,12 @@ public class SerializeTest {
     public void testStringSerialization(Object value, Class<?> cls, ObjectMapper mapper) throws IOException {
         String encoded = mapper.writeValueAsString(value);
         logger.debug(encoded);
-        assertEquals(value, mapper.readValue(encoded, cls));
+        Object output;
+        try {
+            output = mapper.readValue(encoded, cls);
+        } catch (IOException e) {
+            throw new IOException(String.valueOf(value), e);
+        }
+        assertEquals(value, output);
     }
 }

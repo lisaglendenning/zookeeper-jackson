@@ -31,7 +31,7 @@ public class ProtocolRequestDeserializer extends StdDeserializer<Operation.Proto
     }
 
     @Override
-    public ProtocolRequestMessage<?> deserialize(JsonParser json, DeserializationContext ctxt)
+    public Operation.ProtocolRequest<?> deserialize(JsonParser json, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
         return delegate.deserialize(json);
     }

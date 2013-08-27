@@ -12,7 +12,7 @@ import edu.uw.zookeeper.protocol.proto.OpCode;
 import edu.uw.zookeeper.protocol.proto.Records;
 import edu.uw.zookeeper.protocol.proto.Records.Response;
 
-public class ResponseRecordCoreDeserializer implements JacksonCoreDeserializer<Records.Response> {
+public class ResponseRecordCoreDeserializer extends ListCoreDeserializer<Records.Response> {
 
     public static ResponseRecordCoreDeserializer create() {
         return new ResponseRecordCoreDeserializer();
@@ -28,14 +28,20 @@ public class ResponseRecordCoreDeserializer implements JacksonCoreDeserializer<R
     }
 
     @Override
-    public Records.Response deserialize(JsonParser json)
+    protected Records.Response deserializeValue(JsonParser json)
             throws IOException, JsonProcessingException {
-        if (! json.isExpectedStartArrayToken()) {
+        JsonToken token = json.getCurrentToken();
+        if (token == null) {
+            token = json.nextToken();
+            if (token == null) {
+                return null;
+            }
+        }
+        if (token != JsonToken.VALUE_NUMBER_INT) {
             throw new JsonParseException(String.valueOf(json.getCurrentToken()), json.getCurrentLocation());
         }
-        json.nextToken();
         OpCode opcode = OpCode.of(json.getIntValue());
-        json.nextToken();
+        json.clearCurrentToken();
         JacksonInputArchive archive = new JacksonInputArchive(json);
         Records.Response value;
         switch (opcode) {
@@ -46,10 +52,6 @@ public class ResponseRecordCoreDeserializer implements JacksonCoreDeserializer<R
             value= Records.Responses.deserialize(opcode, archive);
             break;
         }
-        if (json.getCurrentToken() != JsonToken.END_ARRAY) {
-            throw new JsonParseException(String.valueOf(json.getCurrentToken()), json.getCurrentLocation());
-        }
-        json.nextToken();
         return value;
     }
 }

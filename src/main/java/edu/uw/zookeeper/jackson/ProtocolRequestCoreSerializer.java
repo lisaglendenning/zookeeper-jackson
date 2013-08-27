@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import edu.uw.zookeeper.protocol.Operation;
 import edu.uw.zookeeper.protocol.ProtocolRequestMessage;
 
-public class ProtocolRequestCoreSerializer implements JacksonCoreSerializer<Operation.ProtocolRequest<?>> {
+public class ProtocolRequestCoreSerializer extends ListCoreSerializer<Operation.ProtocolRequest<?>> {
 
     public static ProtocolRequestCoreSerializer create() {
         return new ProtocolRequestCoreSerializer();
@@ -24,9 +24,7 @@ public class ProtocolRequestCoreSerializer implements JacksonCoreSerializer<Oper
     }
 
     @Override
-    public void serialize(Operation.ProtocolRequest<?> value, JsonGenerator json) throws JsonGenerationException, IOException {
-        json.writeStartArray();
+    protected void serializeValue(Operation.ProtocolRequest<?> value, JsonGenerator json) throws JsonGenerationException, IOException {
         ProtocolRequestMessage.serialize(value, new JacksonOutputArchive(json));
-        json.writeEndArray();
     }
 }

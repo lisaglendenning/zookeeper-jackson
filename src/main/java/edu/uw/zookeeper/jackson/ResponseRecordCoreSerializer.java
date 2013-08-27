@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import edu.uw.zookeeper.protocol.proto.Records;
 
-public class ResponseRecordCoreSerializer implements JacksonCoreSerializer<Records.Response> {
+public class ResponseRecordCoreSerializer extends ListCoreSerializer<Records.Response> {
 
     public static ResponseRecordCoreSerializer create() {
         return new ResponseRecordCoreSerializer();
@@ -21,11 +21,9 @@ public class ResponseRecordCoreSerializer implements JacksonCoreSerializer<Recor
     }
 
     @Override
-    public void serialize(Records.Response value, JsonGenerator json)
+    protected void serializeValue(Records.Response value, JsonGenerator json)
             throws JsonGenerationException, IOException {
-        json.writeStartArray();
         json.writeNumber(value.opcode().intValue());
         Records.Responses.serialize(value, new JacksonOutputArchive(json));
-        json.writeEndArray();
     }
 }

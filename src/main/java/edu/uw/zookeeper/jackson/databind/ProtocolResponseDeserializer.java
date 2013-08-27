@@ -10,7 +10,6 @@ import com.google.common.base.Function;
 
 import edu.uw.zookeeper.jackson.ProtocolResponseCoreDeserializer;
 import edu.uw.zookeeper.protocol.Operation;
-import edu.uw.zookeeper.protocol.ProtocolResponseMessage;
 import edu.uw.zookeeper.protocol.proto.OpCode;
 
 public class ProtocolResponseDeserializer extends StdDeserializer<Operation.ProtocolResponse<?>> {
@@ -33,7 +32,7 @@ public class ProtocolResponseDeserializer extends StdDeserializer<Operation.Prot
     }
 
     @Override
-    public ProtocolResponseMessage<?> deserialize(JsonParser json, DeserializationContext ctxt)
+    public Operation.ProtocolResponse<?> deserialize(JsonParser json, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
         return delegate.deserialize(json);
     }

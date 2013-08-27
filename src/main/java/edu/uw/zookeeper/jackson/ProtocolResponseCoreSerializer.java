@@ -4,10 +4,11 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
+
 import edu.uw.zookeeper.protocol.Operation;
 import edu.uw.zookeeper.protocol.ProtocolResponseMessage;
 
-public class ProtocolResponseCoreSerializer implements JacksonCoreSerializer<Operation.ProtocolResponse<?>> {
+public class ProtocolResponseCoreSerializer extends ListCoreSerializer<Operation.ProtocolResponse<?>> {
 
     public static ProtocolResponseCoreSerializer create() {
         return new ProtocolResponseCoreSerializer();
@@ -24,10 +25,7 @@ public class ProtocolResponseCoreSerializer implements JacksonCoreSerializer<Ope
     }
 
     @Override
-    public void serialize(Operation.ProtocolResponse<?> value, JsonGenerator json) throws JsonGenerationException, IOException {
-        json.writeStartArray();
-        JacksonOutputArchive archive = new JacksonOutputArchive(json);
-        ProtocolResponseMessage.serialize(value, archive);
-        json.writeEndArray();
+    protected void serializeValue(Operation.ProtocolResponse<?> value, JsonGenerator json) throws JsonGenerationException, IOException {
+        ProtocolResponseMessage.serialize(value, new JacksonOutputArchive(json));
     }
 }
