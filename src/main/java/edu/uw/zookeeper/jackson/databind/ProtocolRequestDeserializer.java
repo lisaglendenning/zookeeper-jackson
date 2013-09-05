@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import edu.uw.zookeeper.jackson.ProtocolRequestCoreDeserializer;
 import edu.uw.zookeeper.protocol.Operation;
-import edu.uw.zookeeper.protocol.ProtocolRequestMessage;
 
 public class ProtocolRequestDeserializer extends StdDeserializer<Operation.ProtocolRequest<?>> {
 
