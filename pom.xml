@@ -14,12 +14,12 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>../zkcore/src/main/resources</directory>
+				<directory>../zookeeper-lite/zkcore/src/main/resources</directory>
 			</resource>
 		</resources>
 		<testResources>
 			<testResource>
-				<directory>../zkcore/src/test/resources</directory>
+				<directory>../zookeeper-lite/zkcore/src/test/resources</directory>
 			</testResource>
 		</testResources>
 		<plugins>
