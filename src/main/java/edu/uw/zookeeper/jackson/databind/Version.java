@@ -4,8 +4,8 @@ import java.util.Properties;
 
 public abstract class Version {
 
-    public static final String GROUP = "edu.uw.zookeeper.apache";
-    public static final String ARTIFACT = "zookeeper-jackson";
+    public static final String GROUP = "edu.uw.zookeeper.lite";
+    public static final String ARTIFACT = "zklite-jackson";
     public static final Properties MAVEN_PROPS = new Properties();
     public static final String DEFAULT_VERSION = "0.0.0-SNAPSHOT";
     static {
