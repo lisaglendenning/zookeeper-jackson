@@ -72,11 +72,6 @@
 							<goal>jar</goal>
 						</goals>
 						<configuration>
-							<archive>
-								<manifest>
-									<mainClass>${main.class}</mainClass>
-								</manifest>
-							</archive>
 							<excludes>
 								<exclude>log4j2.xml</exclude>
 							</excludes>
