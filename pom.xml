@@ -9,23 +9,41 @@
 		<groupId>edu.uw.zookeeper</groupId>
 		<artifactId>lite</artifactId>
 		<version>0.5.6-SNAPSHOT</version>
-		<relativePath>../zookeeper-lite/parent</relativePath>
 	</parent>
-	<properties>
-        <zookeeper.lite.source>${project.basedir}/../zookeeper-lite</zookeeper.lite.source>
-	</properties>
 	<build>
-		<resources>
-			<resource>
-				<directory>${zookeeper.lite.source}/zkcore/src/main/resources</directory>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>${zookeeper.lite.source}/zkcore/src/test/resources</directory>
-			</testResource>
-		</testResources>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<classifier>sources</classifier>
+							<includeArtifactIds>zkcore</includeArtifactIds>
+							<includes>log4j2.xml</includes>
+							<outputDirectory>src/main/resources</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>unpack-test-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<classifier>test-sources</classifier>
+							<includeArtifactIds>zkcore</includeArtifactIds>
+							<includes>log4j2.xml</includes>
+							<outputDirectory>src/test/resources</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -48,34 +66,56 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <mainClass>${main.class}</mainClass>
-                                </manifest>
-                            </archive>
-                            <excludes>
-                                <exclude>log4j2.xml</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>test-jar</id>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>log4j2.xml</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
+					<execution>
+						<id>default-jar</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>${main.class}</mainClass>
+								</manifest>
+							</archive>
+							<excludes>
+								<exclude>log4j2.xml</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>test-jar</id>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<exclude>log4j2.xml</exclude>
+							</excludes>
+						</configuration>
+					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/main/resources</directory>
+							<includes>
+								<include>log4j2.xml</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+                        <fileset>
+                            <directory>src/test/resources</directory>
+                            <includes>
+                                <include>log4j2.xml</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+					</filesets>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
