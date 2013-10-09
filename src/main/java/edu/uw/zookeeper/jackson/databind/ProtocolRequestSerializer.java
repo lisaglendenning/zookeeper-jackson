@@ -11,9 +11,9 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import edu.uw.zookeeper.jackson.ProtocolRequestCoreSerializer;
-import edu.uw.zookeeper.protocol.Operation;
+import edu.uw.zookeeper.protocol.Message;
 
-public class ProtocolRequestSerializer extends StdSerializer<Operation.ProtocolRequest<?>> {
+public class ProtocolRequestSerializer extends StdSerializer<Message.ClientRequest<?>> {
 
     public static ProtocolRequestSerializer create() {
         return new ProtocolRequestSerializer();
@@ -31,7 +31,7 @@ public class ProtocolRequestSerializer extends StdSerializer<Operation.ProtocolR
     }
 
     @Override
-    public void serialize(Operation.ProtocolRequest<?> value, JsonGenerator json, SerializerProvider provider) throws JsonGenerationException, IOException {
+    public void serialize(Message.ClientRequest<?> value, JsonGenerator json, SerializerProvider provider) throws JsonGenerationException, IOException {
         delegate.serialize(value, json);
     }
 

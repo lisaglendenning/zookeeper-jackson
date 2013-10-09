@@ -6,11 +6,11 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Function;
 
-import edu.uw.zookeeper.protocol.Operation;
+import edu.uw.zookeeper.protocol.Message;
 import edu.uw.zookeeper.protocol.ProtocolResponseMessage;
 import edu.uw.zookeeper.protocol.proto.OpCode;
 
-public class ProtocolResponseCoreDeserializer extends ListCoreDeserializer<Operation.ProtocolResponse<?>> {
+public class ProtocolResponseCoreDeserializer extends ListCoreDeserializer<Message.ServerResponse<?>> {
 
     public static ProtocolResponseCoreDeserializer create(Function<Integer, OpCode> xidToOpCode) {
         return new ProtocolResponseCoreDeserializer(xidToOpCode);
@@ -25,8 +25,8 @@ public class ProtocolResponseCoreDeserializer extends ListCoreDeserializer<Opera
 
     @SuppressWarnings("rawtypes")
     @Override
-    public Class<Operation.ProtocolResponse> handledType() {
-        return Operation.ProtocolResponse.class;
+    public Class<Message.ServerResponse> handledType() {
+        return Message.ServerResponse.class;
     }
 
     @Override

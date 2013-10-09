@@ -8,9 +8,9 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import edu.uw.zookeeper.jackson.ProtocolRequestCoreDeserializer;
-import edu.uw.zookeeper.protocol.Operation;
+import edu.uw.zookeeper.protocol.Message;
 
-public class ProtocolRequestDeserializer extends StdDeserializer<Operation.ProtocolRequest<?>> {
+public class ProtocolRequestDeserializer extends StdDeserializer<Message.ClientRequest<?>> {
 
     public static ProtocolRequestDeserializer create() {
         return new ProtocolRequestDeserializer();
@@ -30,7 +30,7 @@ public class ProtocolRequestDeserializer extends StdDeserializer<Operation.Proto
     }
 
     @Override
-    public Operation.ProtocolRequest<?> deserialize(JsonParser json, DeserializationContext ctxt)
+    public Message.ClientRequest<?> deserialize(JsonParser json, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
         return delegate.deserialize(json);
     }

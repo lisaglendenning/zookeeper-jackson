@@ -4,10 +4,11 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.uw.zookeeper.protocol.Operation;
+
+import edu.uw.zookeeper.protocol.Message;
 import edu.uw.zookeeper.protocol.ProtocolRequestMessage;
 
-public class ProtocolRequestCoreDeserializer extends ListCoreDeserializer<Operation.ProtocolRequest<?>> {
+public class ProtocolRequestCoreDeserializer extends ListCoreDeserializer<Message.ClientRequest<?>> {
 
     public static ProtocolRequestCoreDeserializer create() {
         return new ProtocolRequestCoreDeserializer();
@@ -19,8 +20,8 @@ public class ProtocolRequestCoreDeserializer extends ListCoreDeserializer<Operat
 
     @SuppressWarnings("rawtypes")
     @Override
-    public Class<Operation.ProtocolRequest> handledType() {
-        return Operation.ProtocolRequest.class;
+    public Class<Message.ClientRequest> handledType() {
+        return Message.ClientRequest.class;
     }
 
     @Override

@@ -9,10 +9,10 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.common.base.Function;
 
 import edu.uw.zookeeper.jackson.ProtocolResponseCoreDeserializer;
-import edu.uw.zookeeper.protocol.Operation;
+import edu.uw.zookeeper.protocol.Message;
 import edu.uw.zookeeper.protocol.proto.OpCode;
 
-public class ProtocolResponseDeserializer extends StdDeserializer<Operation.ProtocolResponse<?>> {
+public class ProtocolResponseDeserializer extends StdDeserializer<Message.ServerResponse<?>> {
 
     public static ProtocolResponseDeserializer create(Function<Integer, OpCode> xidToOpCode) {
         return new ProtocolResponseDeserializer(xidToOpCode);
@@ -32,7 +32,7 @@ public class ProtocolResponseDeserializer extends StdDeserializer<Operation.Prot
     }
 
     @Override
-    public Operation.ProtocolResponse<?> deserialize(JsonParser json, DeserializationContext ctxt)
+    public Message.ServerResponse<?> deserialize(JsonParser json, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
         return delegate.deserialize(json);
     }

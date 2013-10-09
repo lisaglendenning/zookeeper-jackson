@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import edu.uw.zookeeper.data.Operations;
-import edu.uw.zookeeper.protocol.Operation;
+import edu.uw.zookeeper.protocol.Message;
 import edu.uw.zookeeper.protocol.ProtocolRequestMessage;
 import edu.uw.zookeeper.protocol.ProtocolResponseMessage;
 import edu.uw.zookeeper.protocol.proto.OpCode;
@@ -40,7 +40,7 @@ public class ProtocolTest extends SerializeTest {
         @Override
         protected Map<Class<?>, JsonDeserializer<?>> getDefaultDeserializers() {
             return ImmutableMap.<Class<?>, JsonDeserializer<?>>of(
-                    Operation.ProtocolRequest.class, ProtocolRequestDeserializer.create());
+                    Message.ClientRequest.class, ProtocolRequestDeserializer.create());
         }   
     }
     
@@ -71,7 +71,7 @@ public class ProtocolTest extends SerializeTest {
         @Override
         protected Map<Class<?>, JsonDeserializer<?>> getDefaultDeserializers() {
             return ImmutableMap.<Class<?>, JsonDeserializer<?>>of(
-                    Operation.ProtocolResponse.class, ProtocolResponseDeserializer.create(xidToOpCode));
+                    Message.ServerResponse.class, ProtocolResponseDeserializer.create(xidToOpCode));
         }   
     }
     
@@ -104,7 +104,7 @@ public class ProtocolTest extends SerializeTest {
             }
             testStringSerialization(
                     ProtocolRequestMessage.of(opcode.ordinal(), builder.build()), 
-                    Operation.ProtocolRequest.class, mapper);
+                    Message.ClientRequest.class, mapper);
         }
     }
     
@@ -130,7 +130,7 @@ public class ProtocolTest extends SerializeTest {
             }
             testStringSerialization(
                     ProtocolResponseMessage.of(opcode.ordinal(), (long) opcode.ordinal(), builder.build()),
-                    Operation.ProtocolResponse.class,
+                    Message.ServerResponse.class,
                     mapper);
         }
     }
