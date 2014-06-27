@@ -5,7 +5,6 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import edu.uw.zookeeper.protocol.proto.Records;
-import edu.uw.zookeeper.protocol.proto.Records.Request;
 
 public class RequestRecordCoreSerializer extends ListCoreSerializer<Records.Request> {
 
@@ -13,12 +12,12 @@ public class RequestRecordCoreSerializer extends ListCoreSerializer<Records.Requ
         return new RequestRecordCoreSerializer();
     }
 
-    public RequestRecordCoreSerializer() {
+    protected RequestRecordCoreSerializer() {
         super();
     }
 
     @Override
-    public Class<Request> handledType() {
+    public Class<Records.Request> handledType() {
         return Records.Request.class;
     }
 
